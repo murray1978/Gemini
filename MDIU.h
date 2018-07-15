@@ -25,7 +25,7 @@ int count = 0;
 
 /*
  * Prefer camel case, but ....
- * In the escence of readability I will use undeerscore..
+ * In the escence of readability I will use under_score..
 */
 char MDIU_Register[7];
 Keypad MDIU_Keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );

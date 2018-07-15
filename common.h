@@ -91,11 +91,11 @@ struct DATAIN{                                        //Port Assignments
   int DI04:1;
   /*
    * Mode Control
-   *  DI11 + DI10 = Standby
-   *  DI11 + !DI10 + DI13 = Ascent
-   *  DI11 + !DI10 + !DI13 = CatchUp
-   *  !DI11 + DI13 = Rendezvous
-   *  !DI11 + !DI13 = ReEntry
+   *  DI11 + DI10 = Standby = b0110
+   *  DI11 + !DI10 + DI13 = Ascent = b0011
+   *  DI11 + !DI10 + !DI13 = CatchUp = b0010
+   *  !DI11 + DI13 = Rendezvous = b0001 
+   *  !DI11 + !DI13 = ReEntry = b0100
   */
   int DI10:1;     // Mode Control         
   int DI11:1;     // Mode Control
