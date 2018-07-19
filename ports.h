@@ -1,7 +1,7 @@
 #pragma once
 
 /*
- * Ports list
+ * Ports list, incomplete, missing PORTA, PORTB and PORTG
  * Arduino Mega
  * Pin  Name/flags    Gemini use                                                    TESTING
  * Analog
@@ -46,6 +46,20 @@
  * 20   D20/GPIO/SDA    
  * 21   D21/GPIO/SCL
  */
+
+ /*
+  * Gemini computer had a PRO command for io.
+  * The comand structure was
+  * X(A1-A3)Y(A4-A6)A9, A9=0 then accumilator cleared, otherwise leave alone
+  * In asembler it is PRO YX
+  * commands
+  *   X Y  i/o 
+  *   0 0   in  DCS or Rendezvous radar       PRO 00
+  *   0 1  out  Instrument System/Downlink    PRO 10
+  *   0 2  i/o  Time Refrence System          PRO 20
+  *   0 3  out  MDR digit magnitude           PRO 30\
+  *   0 4  out  
+  */
  
 struct PORTS{
   int p17;  // yaw ladder
