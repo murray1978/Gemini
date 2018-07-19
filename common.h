@@ -2,11 +2,7 @@
  * Common.h
  */
 #pragma once
-
-#define uchar_t unsigned char
-#define uint_t  unsigned int
-#define TRUE 1
-#define FALSE !TRUE
+#include "ports.h"
 
 #define KWNO  5.2593  // B4
 #define KP220 175     // B10 sec
@@ -29,22 +25,22 @@
 //LC = Logic Control
 struct LOGIC_CONTROL{
   //LC = Logic Control
-   uchar_t LC15:1;    //MDIU
-   uchar_t LC16:1;    //MDIU - Display Status?
-   uchar_t LC18:1;
-   uchar_t LC20:1;
-   uchar_t LC21:1;
-   uchar_t LC23:1;    //MDIU
-   uchar_t LC24:1;
-   uchar_t LC29:1;
-   uchar_t LC17:1;
-   uchar_t LC4A:1;    //Standby Initalize
-   uchar_t LC4B:1;    //Ascent active
-   uchar_t LC4C:1;  
-   uchar_t LC4D:1;
-   uchar_t LC4E:1;
-   uchar_t LC4F:1;
-   uchar_t LC30:1;
+   bool LC15:1;    //MDIU
+   bool LC16:1;    //MDIU - Display Status?
+   bool LC18:1;
+   bool LC20:1;
+   bool LC21:1;
+   bool LC23:1;    //MDIU
+   bool LC24:1;
+   bool LC29:1;
+   bool LC17:1;
+   bool LC4A:1;    //Standby Initalize
+   bool LC4B:1;    //Ascent active
+   bool LC4C:1;  
+   bool LC4D:1;
+   bool LC4E:1;
+   bool LC4F:1;
+   bool LC30:1;
 };
 
 struct GIMBAL{
@@ -87,43 +83,8 @@ struct VALUES
   int CP137;
 };
 
-struct DATAIN{                                        //Port Assignments
-  int DI04:1;
-  /*
-   * Mode Control
-   *  DI11 + DI10 = Standby = b0110
-   *  DI11 + !DI10 + DI13 = Ascent = b0011
-   *  DI11 + !DI10 + !DI13 = CatchUp = b0010
-   *  !DI11 + DI13 = Rendezvous = b0001 
-   *  !DI11 + !DI13 = ReEntry = b0100
-  */
-  int DI10:1;     // Mode Control         
-  int DI11:1;     // Mode Control
-  int DI13:1;     // Mode Control
-  // Start computaions switch
-  // Enter button
-  // cancel button
-  // reset button
-  
-};
 
-//Data Out objects
-struct DATAOUT{                                       // Port Assignments
-  int DO02;   // Pitch resolution control? 
-  int DO03;   // Yaw resolution control?
-  int DO04;
-  int DO40:1; // insert Light
-  int DO41:1; // display off
-  int DO44;   // Yaw ladder buffer
-  int DO61;   // Gain Change
-  int DO62:1; // start computations light
-  int DO05:1; // Computer running ligh
-  int DO64:1; // SECO light
-  //malf light
-};
 
-struct DATAOUT dout;
-struct DATAIN  din;
 struct LOGIC_CONTROL logicControl;
 struct GIMBAL gimbal;
 struct ACCELERATION accel;

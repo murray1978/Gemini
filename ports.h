@@ -3,7 +3,7 @@
 /*
  * Ports list
  * Arduino Mega
- * Pin  Name/flags    Gemini use
+ * Pin  Name/flags    Gemini use                                                    TESTING
  * Analog
  * 0    ADC0
  * 1    ADC1
@@ -13,9 +13,9 @@
  * 5    ADC5
  * 6    ADC6
  * 7    ADC7
- * 8    ADC8/PK0        General Gemini Data Bus D0, Or use AD0-AD7-A15,WR,ALE?
- * 9    ADC9/PK1        General Gemini Data Bus D1
- * 10   ADC10/PK2       General Gemini Data Bus D2
+ * 8    ADC8/PK0        General Gemini Data Bus D0, Or use AD0-AD7-A15,WR,ALE?      DI0  
+ * 9    ADC9/PK1        General Gemini Data Bus D1                                  DI1
+ * 10   ADC10/PK2       General Gemini Data Bus D2                                  DI3  
  * 11   ADC11/PK3       General Gemini Data Bus D3
  * 12   ADC12/PK4       General Gemini Data Bus D4
  * 13   ADC13/PK5       General Gemini Data Bus D5  
@@ -53,5 +53,110 @@ struct PORTS{
   int p27;  // roll ladder
 };
 
+struct DATAIN{                                        //Port Assignments
+  int DI04:1;
+  /*
+   * Mode Control
+   *  DI11 + DI10 = Standby = b0110
+   *  DI11 + !DI10 + DI13 = Ascent = b0011
+   *  DI11 + !DI10 + !DI13 = CatchUp = b0010
+   *  !DI11 + DI13 = Rendezvous = b0001 
+   *  !DI11 + !DI13 = ReEntry = b0100
+  */
+  int DI10:1;     // Mode Control         
+  int DI11:1;     // Mode Control
+  int DI13:1;     // Mode Control
+  // Start computaions switch
+  // Enter button
+  // cancel button
+  // reset button
+  
+};
+
+//Data Out objects
+struct DATAOUT{                                       // Port Assignments
+  int DO02;   // Pitch resolution control? 
+  int DO03;   // Yaw resolution control?
+  int DO04;   // Roll resolution control?
+  int DO40:1; // insert Light
+  int DO41:1; // display off
+  int DO44;   // Yaw ladder buffer
+  int DO61;   // Gain Change
+  int DO62:1; // start computations light
+  int DO05:1; // Computer running ligh
+  int DO64:1; // SECO light
+  //malf light
+};
+
+struct DATAOUT dout;
+/*
+ * struct DATAOUT dout = {
+ *    
+ * };
+*/
+
+struct DATAIN  din;
 struct PORTS ports;
+
+/*
+ * Write a byte to a port, 
+ * PORTA + PORTC =  16 bit data
+ * PORTA = 8 bit address, 255 devices    
+ * PORTG = WR(PG0), RD(PG1), ALE(PG2) 
+ */
+void outPortb( byte portAddress, unsigned int data){
+  GDRD = 0xff;    //Set PORTG to outputs
+  ADRD = 0xff;    //Set PORTA to outputs
+  BDRD = 0xFF;    //Set PORTB to outputs
+  //Set PORTA = portAddress
+  PORTA = portAddress;
+  //Set PORTG ALE = 1
+  PORTG = B00000100;
+  delay(20)
+  //Set PORTA + PORTB = data
+  //Set PORTG ALE = 0
+  PORTG = B00000000;
+  //Set PORTG WR = 1
+  PORTG = B00000001;
+  delay(20)
+  PORTG = 0x00;
+  PORTA = 0x00;
+  PORTB = 0x00;
+}
+
+/*
+ * Read an unsigned from a port, 
+ * PORTA + PORTC =  16 bit data
+ * PORTA = 8 bit address, 255 devices    
+ * PORTG = WR(PG0), RD(PG1), ALE(PG2) 
+ */
+byte inPortb( byte port ){
+  GDRD = 0xff;    //Set PORTG to outputs
+  ADRD = 0xFF;    //Set PORTA to inputs
+  BDRD = 0x00;    //Set PORTB to outputs
+  //Set PORTA = portAddress
+  PORTA = portAddress;
+  //Set PORTG ALE = 1
+  PORTG = B00000100;
+  delay(20)
+  //Set PORTA + PORTB = data
+  //Set PORTG ALE = 0
+  PORTG = B00000000;
+  //Set PORTG WR = 1
+  PORTG = B00000001;
+  delay(20)
+  //PORTA has lower byte
+  //PORTB has higher byte
+  PORTG = 0x00;
+  PORTA = 0x00;
+  PORTB = 0x00;
+}
+
+
+//Read a pin state
+bool inPin( byte pin){
+  return false;
+}
+//write a pin state
+void outPin( byte pin, bool state){}
 
